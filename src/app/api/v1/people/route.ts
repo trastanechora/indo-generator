@@ -1,2 +1,2 @@
-export { GET } from '@/backend/delivery/apis/people';
+export { GET } from '@/backend/deliveries/api/people';
  
