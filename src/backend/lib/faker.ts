@@ -1,8 +1,4 @@
-import { faker } from '@faker-js/faker/locale/id_ID';
-
-declare const globalThis: {
-  fakerGlobal: FakerSingleton['faker'];
-} & typeof global;
+import { faker } from "@faker-js/faker/locale/id_ID";
 
 class FakerSingleton {
   public faker;
@@ -19,11 +15,6 @@ class FakerSingleton {
   };
 }
 
-const main = () => {
-  const faker = globalThis.fakerGlobal ?? FakerSingleton.getInstance().faker;
-  return faker;
-};
+const fakerInstance = FakerSingleton.getInstance();
 
-export default main();
-
-if (process.env.NODE_ENV !== 'production') globalThis.fakerGlobal = main();
+export default fakerInstance.faker;
