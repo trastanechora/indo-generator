@@ -1,8 +1,3 @@
-import type {
-  Person,
-  PersonGenderInput,
-} from "@/backend/entities/person/types";
-
 import getStreetAddress from "@/backend/repositories/generator/get-street-address";
 import provinces from "@/backend/repositories/static/get-province";
 import regencies from "@/backend/repositories/static/get-regency";
@@ -16,22 +11,47 @@ interface Props {
   vilageId?: number;
 }
 
+interface AddressItem {
+  name: string;
+  code?: string;
+}
+
 const createFullAddress = (
-  village?: string,
-  district?: string,
-  regency?: string,
-  province?: string,
+  village?: AddressItem,
+  district?: AddressItem,
+  regency?: AddressItem,
+  province?: AddressItem,
   postalCode?: string | number
 ) => {
   let address = getStreetAddress();
+  let addressCoding = "";
 
-  if (village) address = address + ", " + village;
-  if (district) address = address + ", " + district;
-  if (regency) address = address + ", " + regency;
-  if (province) address = address + ", " + province;
+  if (village) address = address + ", " + village.name;
+
+  if (district) {
+    address = address + ", " + district.name;
+    addressCoding = district.code + addressCoding;
+  } else {
+    addressCoding = "00" + addressCoding;
+  }
+
+  if (regency) {
+    address = address + ", " + regency.name;
+    addressCoding = regency.code + addressCoding;
+  } else {
+    addressCoding = "00" + addressCoding;
+  }
+
+  if (province) {
+    address = address + ", " + province.name;
+    addressCoding = province.code + addressCoding;
+  } else {
+    addressCoding = "00" + addressCoding;
+  }
+
   if (postalCode) address = address + ", " + postalCode + ".";
 
-  return address;
+  return { address, addressCoding };
 };
 
 const getRandomAddress = (props: Props) => {
@@ -50,20 +70,20 @@ const getRandomAddress = (props: Props) => {
           const village = villages.getById(vilageId);
 
           return createFullAddress(
-            village?.name,
-            district?.name,
-            regency?.name,
-            province?.name,
+            village,
+            district,
+            regency,
+            province,
             village?.pos_code
           );
         }
 
         const village = villages.getRandomByDistrictId(districtId);
         return createFullAddress(
-          village?.name,
-          district?.name,
-          regency?.name,
-          province?.name,
+          village,
+          district,
+          regency,
+          province,
           village?.pos_code
         );
       }
@@ -72,10 +92,10 @@ const getRandomAddress = (props: Props) => {
       const village = villages.getRandomByDistrictId(district.id);
 
       return createFullAddress(
-        village?.name,
-        district?.name,
-        regency?.name,
-        province?.name,
+        village,
+        district,
+        regency,
+        province,
         village?.pos_code
       );
     }
@@ -85,10 +105,10 @@ const getRandomAddress = (props: Props) => {
     const village = villages.getRandomByDistrictId(district.id);
 
     return createFullAddress(
-      village?.name,
-      district?.name,
-      regency?.name,
-      province?.name,
+      village,
+      district,
+      regency,
+      province,
       village?.pos_code
     );
   }
@@ -99,10 +119,10 @@ const getRandomAddress = (props: Props) => {
   const village = villages.getRandomByDistrictId(district.id);
 
   return createFullAddress(
-    village?.name,
-    district?.name,
-    regency?.name,
-    province?.name,
+    village,
+    district,
+    regency,
+    province,
     village?.pos_code
   );
 };

@@ -1,37 +1,24 @@
+import SingletonFactory from "@/backend/repositories/static/lib/singleton-factory";
+
 import data from "./data";
 import type { Village } from "./type";
 
-class VillageSingleton {
-  private static instance: VillageSingleton;
-  private list: Village[];
-  private length: number;
-
-  // Private constructor to prevent direct instantiation
-  private constructor() {
-    this.list = data;
-    this.length = data.length;
+class VillageSingleton extends SingletonFactory<Village> {
+  private constructor(item: Village[]) {
+    super(item);
   }
 
-  // Static method to get the singleton instance
-  public static getInstance() {
+  // Public static method to get the singleton instance from class
+  static getInstance(item: Village[]) {
     if (!VillageSingleton.instance) {
-      VillageSingleton.instance = new VillageSingleton();
+      VillageSingleton.instance = new VillageSingleton(item);
     }
-    return VillageSingleton.instance;
+    return VillageSingleton.instance as VillageSingleton;
   }
 
-  public getList() {
-    return this.list;
-  }
-  public getById(id: number) {
-    return this.list.find((village) => village.id === id);
-  }
+  // Public methods to be exposed from instance
   public getByDistrictId(id: number) {
     return this.list.filter((village) => village.kecamatan_id === id);
-  }
-  public getRandom() {
-    const randomIndex = Math.floor(Math.random() * this.length);
-    return this.list[randomIndex];
   }
   public getRandomByDistrictId(id: number) {
     const _list = this.list.filter((village) => village.kecamatan_id === id);
@@ -40,6 +27,6 @@ class VillageSingleton {
   }
 }
 
-const villageInstance = VillageSingleton.getInstance();
+const villageInstance = VillageSingleton.getInstance(data);
 
 export default villageInstance;

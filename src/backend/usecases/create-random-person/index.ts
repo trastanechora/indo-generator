@@ -19,13 +19,15 @@ const getRandomPerson = (props: Props) => {
   const { maxAge, minAge, gender = "random" } = props;
 
   const processedGender = getGender(gender);
+  const { address, addressCoding } = getRandomAddress({});
+  const { dob, dobCoding } = getDateOfBirth({ max: maxAge, min: minAge });
 
   const person: Person = {
-    id: "",
+    id: addressCoding + dobCoding,
     name: getFullName({ gender: processedGender }),
     gender: processedGender,
-    address: getRandomAddress({}),
-    dob: getDateOfBirth({ max: maxAge, min: minAge }),
+    address: address,
+    dob: dob,
   };
 
   return person;

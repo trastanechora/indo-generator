@@ -1,12 +1,12 @@
-import faker from '@/backend/lib/faker';
-import type { PersonGender } from '@/backend/entities/person/types';
+import faker from "@/backend/repositories/generator/lib/faker";
+import type { PersonGender } from "@/backend/entities/person/types";
 
 interface Props {
   gender: PersonGender;
 }
 
 const getFullName = (props: Props) => {
-  const { gender = 'male' } = props;
+  const { gender = "male" } = props;
 
   // faker.person.fullName() often returns duplicated first name
   // e.g "Joko Joko Santoso" instead of "Joko Santoso"

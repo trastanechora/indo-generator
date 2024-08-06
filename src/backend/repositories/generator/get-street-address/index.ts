@@ -1,4 +1,4 @@
-import faker from '@/backend/lib/faker';
+import faker from "@/backend/repositories/generator/lib/faker";
 
 const getStreetAddress = () => {
   return faker.location.streetAddress();

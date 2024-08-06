@@ -1,35 +1,24 @@
+import SingletonFactory from "@/backend/repositories/static/lib/singleton-factory";
+
 import data from "./data";
 import type { Regency } from "./type";
 
-class RegencySingleton {
-  private static instance: RegencySingleton;
-  private list: Regency[];
-
-  // Private constructor to prevent direct instantiation
-  private constructor() {
-    this.list = data;
+class RegencySingleton extends SingletonFactory<Regency> {
+  private constructor(item: Regency[]) {
+    super(item);
   }
 
-  // Static method to get the singleton instance
-  public static getInstance() {
+  // Public static method to get the singleton instance from class
+  public static getInstance(item: Regency[]) {
     if (!RegencySingleton.instance) {
-      RegencySingleton.instance = new RegencySingleton();
+      RegencySingleton.instance = new RegencySingleton(item);
     }
-    return RegencySingleton.instance;
+    return RegencySingleton.instance as RegencySingleton;
   }
 
-  public getList() {
-    return this.list;
-  }
-  public getById(id: number) {
-    return this.list.find((regency) => regency.id === id);
-  }
+  // Public methods to be exposed from instance
   public getByProvinceId(id: number) {
     return this.list.filter((regency) => regency.provinsi_id === id);
-  }
-  public getRandom() {
-    const randomIndex = Math.floor(Math.random() * this.list.length);
-    return this.list[randomIndex];
   }
   public getRandomByProvinceId(id: number) {
     const _list = this.list.filter((regency) => regency.provinsi_id === id);
@@ -38,6 +27,6 @@ class RegencySingleton {
   }
 }
 
-const regencyInstance = RegencySingleton.getInstance();
+const regencyInstance = RegencySingleton.getInstance(data);
 
 export default regencyInstance;

@@ -1,35 +1,22 @@
+import SingletonFactory from "@/backend/repositories/static/lib/singleton-factory";
+
 import data from "./data";
 import type { Province } from "./type";
 
-class ProvinceSingleton {
-  private static instance: ProvinceSingleton;
-  private list: Province[];
-
-  // Private constructor to prevent direct instantiation
-  private constructor() {
-    this.list = data;
+class ProvinceSingleton extends SingletonFactory<Province> {
+  private constructor(item: Province[]) {
+    super(item);
   }
 
-  // Static method to get the singleton instance
-  public static getInstance() {
+  // Public static method to get the singleton instance from class
+  public static getInstance(item: Province[]) {
     if (!ProvinceSingleton.instance) {
-      ProvinceSingleton.instance = new ProvinceSingleton();
+      ProvinceSingleton.instance = new ProvinceSingleton(item);
     }
-    return ProvinceSingleton.instance;
-  }
-
-  public getList() {
-    return this.list;
-  }
-  public getRandom() {
-    const randomIndex = Math.floor(Math.random() * this.list.length);
-    return this.list[randomIndex];
-  }
-  public getById(id: number) {
-    return this.list.find((province) => province.id === id);
+    return ProvinceSingleton.instance as ProvinceSingleton;
   }
 }
 
-const provinceInstance = ProvinceSingleton.getInstance();
+const provinceInstance = ProvinceSingleton.getInstance(data);
 
 export default provinceInstance;
